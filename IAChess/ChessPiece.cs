@@ -97,10 +97,6 @@ namespace IAChess
                         {
                             pos[i, j] = 1;
                         }
-                        else
-                        {
-                            pos[i, j] = 0;
-                        }
                     }
                 }
 

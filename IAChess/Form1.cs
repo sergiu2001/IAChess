@@ -17,6 +17,7 @@ namespace IAChess
         Table chessTable = new Table();
 
         int selectedPieceRow, selectedPieceCol;
+        ChessPiece selectedPiece;
         public Form1()
         {
             InitializeComponent();
@@ -100,7 +101,7 @@ namespace IAChess
                 {
                     pictureBox.BackColor = Color.FromArgb(170, 50, 55, 59);
 
-                    ChessPiece selectedPiece = (playerW.isOnBoard(cellRow, cellColumn) != null) ? (playerW.isOnBoard(cellRow, cellColumn)) : (playerB.isOnBoard(cellRow, cellColumn));
+                    selectedPiece = (playerW.isOnBoard(cellRow, cellColumn) != null) ? (playerW.isOnBoard(cellRow, cellColumn)) : (playerB.isOnBoard(cellRow, cellColumn));
                     int[,] pos;
                     selectedPiece.IsValidMove(cellRow, cellColumn, chessTable.values, out pos);
                     for (int i = 0; i < pos.GetLength(0); i++)
@@ -123,6 +124,16 @@ namespace IAChess
             {
                 if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.FromArgb(244, 184, 96) && chessTable.values[cellRow, cellColumn] == 0)
                 {
+                    chessTable.values[cellRow, cellColumn] = chessTable.values[selectedPieceRow, selectedPieceCol];
+                    chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
+                    selectedPiece.Row = cellRow;
+                    selectedPiece.Column = cellColumn;
+
+                    chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
+                    chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
+                    selectedPieceCol = -1;
+                    selectedPieceRow = -1;
+                    selectedPiece = null;
 
                 }
                 if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.Red)
