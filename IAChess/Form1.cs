@@ -100,7 +100,6 @@ namespace IAChess
                 if (pictureBox.Image != null)
                 {
                     pictureBox.BackColor = Color.FromArgb(170, 50, 55, 59);
-
                     selectedPiece = (playerW.isOnBoard(cellRow, cellColumn) != null) ? (playerW.isOnBoard(cellRow, cellColumn)) : (playerB.isOnBoard(cellRow, cellColumn));
                     int[,] pos;
                     selectedPiece.IsValidMove(cellRow, cellColumn, chessTable.values, out pos);
@@ -119,6 +118,7 @@ namespace IAChess
                         }
                     }
                 }
+
             }
             else
             {
@@ -136,9 +136,28 @@ namespace IAChess
                     selectedPiece = null;
 
                 }
-                if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.Red)
+                else if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.Red)
                 {
+                    ChessPiece redPiece = (playerW.isOnBoard(cellRow, cellColumn) != null) ? (playerW.isOnBoard(cellRow, cellColumn)) : (playerB.isOnBoard(cellRow, cellColumn));
+                    chessTable.values[cellRow, cellColumn] = chessTable.values[selectedPieceRow, selectedPieceCol];
+                    chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
+                    selectedPiece.Row = cellRow;
+                    selectedPiece.Column = cellColumn;
 
+                    if (redPiece.IsWhite)
+                    {
+                        playerW.Pieces.Remove(redPiece);
+                    }
+                    else
+                    {
+                        playerB.Pieces.Remove(redPiece);
+                    }
+
+                    chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
+                    chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
+                    selectedPieceCol = -1;
+                    selectedPieceRow = -1;
+                    selectedPiece = null;
                 }
                 for (int i = 0; i < tlpChessboard.RowCount; i++)
                 {
