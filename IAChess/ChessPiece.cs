@@ -26,6 +26,7 @@ namespace IAChess
         }
 
         public abstract void IsValidMove(int toRow, int toColumn, int[,] tablePos, out int[,] pos);
+        public abstract ChessPiece Promote(bool white, int row, int col);
 
     }
 
@@ -67,6 +68,11 @@ namespace IAChess
 
 
 
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -123,24 +129,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Prince promotedPiece = new Prince(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Prince(white, row, col, white ? Image.FromFile("images\\princeW.png") : Image.FromFile("images\\princeB.png"), white ? 14 : -14);
             }
+            return null;
         }
     }
 
@@ -182,6 +185,11 @@ namespace IAChess
                 pos[toRow, toColumn] = 0;
 
             }
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -248,6 +256,11 @@ namespace IAChess
 
             }
         }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
+        }
     }
 
     public class Silver_General : ChessPiece
@@ -289,14 +302,14 @@ namespace IAChess
             {
                 if (toRow + 1 <= 8)
                 {
-                    pos[toRow + 1, toColumn] = 1;
+                    pos[toRow + 1, toColumn] = (tablePos[toRow + 1, toColumn] > 0) ? 0 : 1;
                 }
             }
             else
             {
                 if (toRow - 1 >= 0)
                 {
-                    pos[toRow - 1, toColumn] = 1;
+                    pos[toRow - 1, toColumn] = (tablePos[toRow - 1, toColumn] < 0) ? 0 : 1;
                 }
             }
 
@@ -317,24 +330,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Whole promotedPiece = new Whole(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Gold_General(white, row, col, white ? Image.FromFile("images\\goldgeneralW.png") : Image.FromFile("images\\goldgeneralB.png"), white ? 6 : -6);
             }
+            return null;
         }
     }
 
@@ -400,6 +410,11 @@ namespace IAChess
 
             pos[toRow, toColumn] = 0;
 
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -526,24 +541,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Dragon promotedPiece = new Dragon(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Dragon(white, row, col, white ? Image.FromFile("images\\dragonW.png") : Image.FromFile("images\\dragonB.png"), white ? 12 : -12);
             }
+            return null;
         }
     }
 
@@ -584,6 +596,11 @@ namespace IAChess
 
             pos[toRow, toColumn] = 0;
 
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -636,24 +653,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Apricot promotedPiece = new Apricot(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Apricot(white, row, col, white ? Image.FromFile("images\\apricotW.png") : Image.FromFile("images\\apricotB.png"), white ? 6 : -6);
             }
+            return null;
         }
     }
 
@@ -720,6 +734,11 @@ namespace IAChess
             pos[toRow, toColumn] = 0;
 
         }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
+        }
     }
 
     public class Knight : ChessPiece
@@ -771,24 +790,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Scepter promotedPiece = new Scepter(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Scepter(white, row, col, white ? Image.FromFile("images\\scepterW.png") : Image.FromFile("images\\scepterB.png"), white ? 6 : -6);
             }
+            return null;
         }
     }
 
@@ -854,6 +870,11 @@ namespace IAChess
 
             pos[toRow, toColumn] = 0;
 
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -1008,24 +1029,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Horse promotedPiece = new Horse(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Horse(white, row, col, white ? Image.FromFile("images\\horseW.png") : Image.FromFile("images\\horseB.png"), white ? 10 : -10);
             }
+            return null;
         }
     }
 
@@ -1066,6 +1084,11 @@ namespace IAChess
 
             pos[toRow, toColumn] = 0;
 
+        }
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 
@@ -1111,24 +1134,21 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row == 0;
+                return Row >= 5;
             }
             else
             {
-                return Row == 7;
+                return Row <= 3;
             }
         }
 
-        public void Promote()
+        public override ChessPiece Promote(bool white, int row, int col)
         {
             if (CanPromote())
             {
-                Tokin promotedPiece = new Tokin(IsWhite, Row, Column, Image, Value);
-
-                // Replace the current Silver_General piece with the promoted Gold_General piece
-                // You can do this by updating the chess board to remove the Silver_General piece and add the Gold_General piece
-                // You will also need to update any references to the current piece in the game logic
+                return new Tokin(white, row, col, white ? Image.FromFile("images\\tokinW.png") : Image.FromFile("images\\tokinB.png"), white ? 6 : -6);
             }
+            return null;
         }
     }
 
@@ -1194,6 +1214,12 @@ namespace IAChess
 
             pos[toRow, toColumn] = 0;
 
+        }
+
+
+        public override ChessPiece Promote(bool white, int row, int col)
+        {
+            return null;
         }
     }
 }

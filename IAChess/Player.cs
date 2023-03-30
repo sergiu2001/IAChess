@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,15 @@ namespace IAChess
 
         public Player(bool isWhite)
         {
-            Image pawnImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\pawnW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\pawnB.png");
-            Image bishopImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\bishopW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\bishopB.png");
-            Image elephantImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\elephantW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\elephantB.png");
-            Image rookImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\rookW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\rookB.png");
-            Image lanceImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\lanceW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\lanceB.png");
-            Image knightImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\knightW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\knightB.png");
-            Image silvergeneralImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\silvergeneralW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\silvergeneralB.png");
-            Image goldgeneralImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\goldgeneralW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\goldgeneralB.png");
-            Image kingImage = isWhite ? Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\kingW.png") : Image.FromFile("C:\\Users\\sergi\\OneDrive\\Documents\\IA\\IAChess\\IAChess\\images\\kingB.png");
+            Image pawnImage = isWhite ? Image.FromFile("images\\pawnW.png") : Image.FromFile("images\\pawnB.png");
+            Image bishopImage = isWhite ? Image.FromFile("images\\bishopW.png") : Image.FromFile("images\\bishopB.png");
+            Image elephantImage = isWhite ? Image.FromFile("images\\elephantW.png") : Image.FromFile("images\\elephantB.png");
+            Image rookImage = isWhite ? Image.FromFile("images\\rookW.png") : Image.FromFile("images\\rookB.png");
+            Image lanceImage = isWhite ? Image.FromFile("images\\lanceW.png") : Image.FromFile("images\\lanceB.png");
+            Image knightImage = isWhite ? Image.FromFile("images\\knightW.png") : Image.FromFile("images\\knightB.png");
+            Image silvergeneralImage = isWhite ? Image.FromFile("images\\silvergeneralW.png") : Image.FromFile("images\\silvergeneralB.png");
+            Image goldgeneralImage = isWhite ? Image.FromFile("images\\goldgeneralW.png") : Image.FromFile("images\\goldgeneralB.png");
+            Image kingImage = isWhite ? Image.FromFile("images\\kingW.png") : Image.FromFile("images\\kingB.png");
 
             Pieces = new List<ChessPiece>();
 
@@ -55,7 +56,7 @@ namespace IAChess
 
         public ChessPiece isOnBoard(int row, int column)
         {
-            foreach (ChessPiece piece in this.Pieces)
+            foreach (ChessPiece piece in Pieces)
             {
                 if (piece.Row == row && piece.Column == column)
                 {
@@ -63,6 +64,13 @@ namespace IAChess
                 }
             }
             return null;
+        }
+
+        public void promotePiece(ChessPiece newPiece, ChessPiece oldPiece)
+        {
+            int index = Pieces.IndexOf(oldPiece);
+            Pieces.RemoveAt(index);
+            Pieces.Insert(index, newPiece);
         }
 
     }

@@ -80,6 +80,34 @@ namespace IAChess
 
         }
 
+        public void ClearTable(TableLayoutPanel tlpChessboard)
+        {
+            for (int i = 0; i < tlpChessboard.RowCount; i++)
+            {
+                for (int j = 0; j < tlpChessboard.ColumnCount; j++)
+                {
+                    tlpChessboard.GetControlFromPosition(j, i).BackColor = Color.Transparent;
+                }
+            }
+        }
+
+        public void SaveNewPosition(int cellRow, int cellColumn)
+        {
+            chessTable.values[cellRow, cellColumn] = chessTable.values[selectedPieceRow, selectedPieceCol];
+            chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
+            selectedPiece.Row = cellRow;
+            selectedPiece.Column = cellColumn;
+        }
+
+        public void RemoveLastPosition()
+        {
+            chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
+            chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
+            selectedPieceCol = -1;
+            selectedPieceRow = -1;
+            selectedPiece = null;
+        }
+
         public void ClickOnTableLayoutPanel(object sender, MouseEventArgs e)
         {
             int cellRow = tlpChessboard.GetRow((Control)sender);
@@ -87,13 +115,7 @@ namespace IAChess
             PictureBox pictureBox = (PictureBox)sender;
             if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.Transparent && chessTable.values[cellRow, cellColumn] != 0)
             {
-                for (int i = 0; i < tlpChessboard.RowCount; i++)
-                {
-                    for (int j = 0; j < tlpChessboard.ColumnCount; j++)
-                    {
-                        tlpChessboard.GetControlFromPosition(j, i).BackColor = Color.Transparent;
-                    }
-                }
+                ClearTable(tlpChessboard);
                 selectedPieceRow = cellRow;
                 selectedPieceCol = cellColumn;
 
@@ -122,27 +144,28 @@ namespace IAChess
             }
             else
             {
+                ChessPiece promotedPiece = selectedPiece.Promote(selectedPiece.IsWhite, selectedPiece.Row, selectedPiece.Column);
+                if (promotedPiece != null)
+                {
+                    if (selectedPiece.IsWhite)
+                    {
+                        playerW.promotePiece(promotedPiece, selectedPiece);
+                    }
+                    else
+                    {
+                        playerB.promotePiece(promotedPiece, selectedPiece);
+                    }
+
+                    selectedPiece = promotedPiece;
+                }
                 if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.FromArgb(244, 184, 96) && chessTable.values[cellRow, cellColumn] == 0)
                 {
-                    chessTable.values[cellRow, cellColumn] = chessTable.values[selectedPieceRow, selectedPieceCol];
-                    chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
-                    selectedPiece.Row = cellRow;
-                    selectedPiece.Column = cellColumn;
-
-                    chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
-                    chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
-                    selectedPieceCol = -1;
-                    selectedPieceRow = -1;
-                    selectedPiece = null;
-
+                    SaveNewPosition(cellRow, cellColumn);
                 }
                 else if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.Red)
                 {
                     ChessPiece redPiece = (playerW.isOnBoard(cellRow, cellColumn) != null) ? (playerW.isOnBoard(cellRow, cellColumn)) : (playerB.isOnBoard(cellRow, cellColumn));
-                    chessTable.values[cellRow, cellColumn] = chessTable.values[selectedPieceRow, selectedPieceCol];
-                    chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
-                    selectedPiece.Row = cellRow;
-                    selectedPiece.Column = cellColumn;
+                    SaveNewPosition(cellRow, cellColumn);
 
                     if (redPiece.IsWhite)
                     {
@@ -152,23 +175,12 @@ namespace IAChess
                     {
                         playerB.Pieces.Remove(redPiece);
                     }
-
-                    chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
-                    chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
-                    selectedPieceCol = -1;
-                    selectedPieceRow = -1;
-                    selectedPiece = null;
                 }
-                for (int i = 0; i < tlpChessboard.RowCount; i++)
-                {
-                    for (int j = 0; j < tlpChessboard.ColumnCount; j++)
-                    {
-                        tlpChessboard.GetControlFromPosition(j, i).BackColor = Color.Transparent;
-                    }
-                }
+                RemoveLastPosition();
+                ClearTable(tlpChessboard);
             }
 
-            MessageBox.Show("Cell chosen: (" + cellRow + ", " + cellColumn + ")");
+            // MessageBox.Show("Cell chosen: (" + cellRow + ", " + cellColumn + ")");
         }
 
     }
