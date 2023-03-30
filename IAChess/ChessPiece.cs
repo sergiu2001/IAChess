@@ -129,11 +129,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 
@@ -174,11 +174,10 @@ namespace IAChess
                         {
                             pos[i, j] = 1;
                         }
-
-                        else
-                        {
-                            pos[i, j] = 0;
-                        }
+                    }
+                    else
+                    {
+                        pos[i, j] = 0;
                     }
                 }
 
@@ -220,10 +219,10 @@ namespace IAChess
                         {
                             pos[i, j] = 1;
                         }
-                        else
-                        {
-                            pos[i, j] = 0;
-                        }
+                    }
+                    else
+                    {
+                        pos[i, j] = 0;
                     }
                 }
 
@@ -302,27 +301,16 @@ namespace IAChess
             {
                 if (toRow + 1 <= 8)
                 {
-                    pos[toRow + 1, toColumn] = (tablePos[toRow + 1, toColumn] > 0) ? 0 : 1;
+                    pos[toRow + 1, toColumn] = (tablePos[toRow + 1, toColumn] > 0) ? 0 : (tablePos[toRow + 1, toColumn] < 0) ? -1 : 1;
                 }
             }
             else
             {
                 if (toRow - 1 >= 0)
                 {
-                    pos[toRow - 1, toColumn] = (tablePos[toRow - 1, toColumn] < 0) ? 0 : 1;
+                    pos[toRow - 1, toColumn] = (tablePos[toRow - 1, toColumn] < 0) ? 0 : (tablePos[toRow - 1, toColumn] > 0) ? -1 : 1;
                 }
             }
-
-            if (toColumn - 1 >= 0)
-            {
-                pos[toRow, toColumn - 1] = 0;
-            }
-
-            if (toColumn + 1 <= 8)
-            {
-                pos[toRow, toColumn + 1] = 0;
-            }
-            pos[toRow, toColumn] = 0;
 
         }
 
@@ -330,11 +318,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 
@@ -342,7 +330,7 @@ namespace IAChess
         {
             if (CanPromote())
             {
-                return new Gold_General(white, row, col, white ? Image.FromFile("images\\goldgeneralW.png") : Image.FromFile("images\\goldgeneralB.png"), white ? 6 : -6);
+                return new Whole(white, row, col, white ? Image.FromFile("images\\wholeW.png") : Image.FromFile("images\\wholeB.png"), white ? 6 : -6);
             }
             return null;
         }
@@ -541,11 +529,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 
@@ -572,7 +560,7 @@ namespace IAChess
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if ((i == toRow || j == toColumn) && (Math.Abs(i - toRow) == 1 && Math.Abs(j - toColumn) == 1))
+                    if (Math.Abs(i - toRow) == 1 && Math.Abs(j - toColumn) == 1)
                     {
                         if (IsWhite)
                         {
@@ -590,6 +578,112 @@ namespace IAChess
                     else
                     {
                         pos[i, j] = 0;
+                    }
+                }
+            }
+
+            bool Up = true, Right = true, Down = true, Left = true;
+            if (toRow - 1 >= 0)
+            {
+                for (int i = toRow - 1; i >= 0 && Up; i--)
+                {
+                    if (IsWhite)
+                    {
+                        if (tablePos[i, toColumn] != 0)
+                        {
+                            pos[i, toColumn] = (tablePos[i, toColumn] > 0) ? 0 : -1;
+                            Up = false;
+                        }
+                    }
+                    else
+                    {
+                        if (tablePos[i, toColumn] != 0)
+                        {
+                            pos[i, toColumn] = (tablePos[i, toColumn] < 0) ? 0 : -1;
+                            Up = false;
+                        }
+                    }
+                    if (tablePos[i, toColumn] == 0)
+                    {
+                        pos[i, toColumn] = 1;
+                    }
+                }
+            }
+            if (toColumn + 1 < 9)
+            {
+                for (int i = toColumn + 1; i < 9 && Right; i++)
+                {
+                    if (IsWhite)
+                    {
+                        if (tablePos[toRow, i] != 0)
+                        {
+                            pos[toRow, i] = (tablePos[toRow, i] > 0) ? 0 : -1;
+                            Right = false;
+                        }
+                    }
+                    else
+                    {
+                        if (tablePos[toRow, i] != 0)
+                        {
+                            pos[toRow, i] = (tablePos[toRow, i] < 0) ? 0 : -1;
+                            Right = false;
+                        }
+                    }
+                    if (tablePos[toRow, i] == 0)
+                    {
+                        pos[toRow, i] = 1;
+                    }
+                }
+            }
+            if (toRow + 1 < 9)
+            {
+                for (int i = toRow + 1; i < 9 && Down; i++)
+                {
+                    if (IsWhite)
+                    {
+                        if (tablePos[i, toColumn] != 0)
+                        {
+                            pos[i, toColumn] = (tablePos[i, toColumn] > 0) ? 0 : -1;
+                            Down = false;
+                        }
+                    }
+                    else
+                    {
+                        if (tablePos[i, toColumn] != 0)
+                        {
+                            pos[i, toColumn] = (tablePos[i, toColumn] < 0) ? 0 : -1;
+                            Down = false;
+                        }
+                    }
+                    if (tablePos[i, toColumn] == 0)
+                    {
+                        pos[i, toColumn] = 1;
+                    }
+                }
+            }
+            if (toColumn - 1 >= 0)
+            {
+                for (int i = toColumn - 1; i >= 0 && Left; i--)
+                {
+                    if (IsWhite)
+                    {
+                        if (tablePos[toRow, i] != 0)
+                        {
+                            pos[toRow, i] = (tablePos[toRow, i] > 0) ? 0 : -1;
+                            Left = false;
+                        }
+                    }
+                    else
+                    {
+                        if (tablePos[toRow, i] != 0)
+                        {
+                            pos[toRow, i] = (tablePos[toRow, i] < 0) ? 0 : -1;
+                            Left = false;
+                        }
+                    }
+                    if (tablePos[toRow, i] == 0)
+                    {
+                        pos[toRow, i] = 1;
                     }
                 }
             }
@@ -790,11 +884,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 
@@ -1029,11 +1123,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 
@@ -1056,28 +1150,181 @@ namespace IAChess
         public override void IsValidMove(int toRow, int toColumn, int[,] tablePos, out int[,] pos)
         {
             pos = new int[9, 9];
-            for (int i = 0; i < 9; i++)
+
+            if (toRow - 1 >= 0)
             {
-                for (int j = 0; j < 9; j++)
+                if (IsWhite)
                 {
-                    if ((i == j || i + j == 8) && (i == toRow && Math.Abs(j - toColumn) == 1) && (j == toColumn && Math.Abs(i - toRow) == 1))
+                    pos[toRow - 1, toColumn] = (tablePos[toRow - 1, toColumn] > 0) ? 0 : (tablePos[toRow - 1, toColumn] < 0) ? -1 : 1;
+                }
+                else
+                {
+                    pos[toRow - 1, toColumn] = (tablePos[toRow - 1, toColumn] < 0) ? 0 : (tablePos[toRow - 1, toColumn] > 0) ? -1 : 1;
+                }
+            }
+            if (toColumn - 1 >= 0)
+            {
+                if (IsWhite)
+                {
+                    pos[toRow, toColumn - 1] = (tablePos[toRow, toColumn - 1] > 0) ? 0 : (tablePos[toRow, toColumn - 1] < 0) ? -1 : 1;
+                }
+                else
+                {
+                    pos[toRow, toColumn - 1] = (tablePos[toRow, toColumn - 1] < 0) ? 0 : (tablePos[toRow, toColumn - 1] > 0) ? -1 : 1;
+                }
+            }
+            if (toRow + 1 <= 8)
+            {
+                if (IsWhite)
+                {
+                    pos[toRow + 1, toColumn] = (tablePos[toRow + 1, toColumn] > 0) ? 0 : (tablePos[toRow + 1, toColumn] < 0) ? -1 : 1;
+                }
+                else
+                {
+                    pos[toRow + 1, toColumn] = (tablePos[toRow + 1, toColumn] < 0) ? 0 : (tablePos[toRow + 1, toColumn] > 0) ? -1 : 1;
+                }
+            }
+            if (toColumn + 1 <= 8)
+            {
+                if (IsWhite)
+                {
+                    pos[toRow, toColumn + 1] = (tablePos[toRow, toColumn + 1] > 0) ? 0 : (tablePos[toRow, toColumn + 1] < 0) ? -1 : 1;
+                }
+                else
+                {
+                    pos[toRow, toColumn + 1] = (tablePos[toRow, toColumn + 1] < 0) ? 0 : (tablePos[toRow, toColumn + 1] > 0) ? -1 : 1;
+                }
+            }
+
+            bool UpLeft = true, UpRight = true, DownRight = true, DownLeft = true;
+            if (toRow - 1 >= 0 && toColumn - 1 >= 0)
+            {
+                for (int i = toRow - 1; i >= 0 && UpLeft; i--)
+                {
+                    for (int j = toColumn - 1; j >= 0 && UpLeft; j--)
                     {
-                        if (IsWhite)
+                        if (i - toRow == j - toColumn)
                         {
-                            pos[i, j] = (tablePos[i, j] > 0) ? 0 : -1;
-                        }
-                        else
-                        {
-                            pos[i, j] = (tablePos[i, j] < 0) ? 0 : -1;
-                        }
-                        if (tablePos[i, j] == 0)
-                        {
-                            pos[i, j] = 1;
+                            if (IsWhite)
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] > 0) ? 0 : -1;
+                                    UpLeft = false;
+                                }
+                            }
+                            else
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] < 0) ? 0 : -1;
+                                    UpLeft = false;
+                                }
+                            }
+                            if (tablePos[i, j] == 0)
+                            {
+                                pos[i, j] = 1;
+                            }
                         }
                     }
-                    else
+                }
+            }
+
+            if (toRow - 1 >= 0 && toColumn + 1 < 9)
+            {
+                for (int i = toRow - 1; i >= 0 && UpRight; i--)
+                {
+                    for (int j = toColumn + 1; j < 9 && UpRight; j++)
                     {
-                        pos[i, j] = 0;
+                        if (i - toRow == -(j - toColumn))
+                        {
+                            if (IsWhite)
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] > 0) ? 0 : -1;
+                                    UpRight = false;
+                                }
+                            }
+                            else
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] < 0) ? 0 : -1;
+                                    UpRight = false;
+                                }
+                            }
+                            if (tablePos[i, j] == 0)
+                            {
+                                pos[i, j] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (toRow + 1 < 9 && toColumn + 1 < 9)
+            {
+                for (int i = toRow + 1; i < 9 && DownRight; i++)
+                {
+                    for (int j = toColumn + 1; j < 9 && DownRight; j++)
+                    {
+                        if (i - toRow == j - toColumn)
+                        {
+                            if (IsWhite)
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] > 0) ? 0 : -1;
+                                    DownRight = false;
+                                }
+                            }
+                            else
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] < 0) ? 0 : -1;
+                                    DownRight = false;
+                                }
+                            }
+                            if (tablePos[i, j] == 0)
+                            {
+                                pos[i, j] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (toRow + 1 < 9 && toColumn - 1 >= 0)
+            {
+                for (int i = toRow + 1; i < 9 && DownLeft; i++)
+                {
+                    for (int j = toColumn - 1; j >= 0 && DownLeft; j--)
+                    {
+                        if (i - toRow == -(j - toColumn))
+                        {
+                            if (IsWhite)
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] > 0) ? 0 : -1;
+                                    DownLeft = false;
+                                }
+                            }
+                            else
+                            {
+                                if (tablePos[i, j] != 0)
+                                {
+                                    pos[i, j] = (tablePos[i, j] < 0) ? 0 : -1;
+                                    DownLeft = false;
+                                }
+                            }
+                            if (tablePos[i, j] == 0)
+                            {
+                                pos[i, j] = 1;
+                            }
+                        }
                     }
                 }
             }
@@ -1134,11 +1381,11 @@ namespace IAChess
         {
             if (IsWhite)
             {
-                return Row >= 5;
+                return Row > 5;
             }
             else
             {
-                return Row <= 3;
+                return Row < 3;
             }
         }
 

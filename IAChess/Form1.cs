@@ -97,15 +97,28 @@ namespace IAChess
             chessTable.images[cellRow, cellColumn].Image = chessTable.images[selectedPieceRow, selectedPieceCol].Image;
             selectedPiece.Row = cellRow;
             selectedPiece.Column = cellColumn;
-        }
 
-        public void RemoveLastPosition()
-        {
             chessTable.values[selectedPieceRow, selectedPieceCol] = 0;
             chessTable.images[selectedPieceRow, selectedPieceCol].Image = null;
-            selectedPieceCol = -1;
-            selectedPieceRow = -1;
-            selectedPiece = null;
+        }
+
+        public void PromotePiece()
+        {
+            ChessPiece promotedPiece = selectedPiece.Promote(selectedPiece.IsWhite, selectedPiece.Row, selectedPiece.Column);
+            if (promotedPiece != null)
+            {
+                if (selectedPiece.IsWhite)
+                {
+                    playerW.promotePiece(promotedPiece, selectedPiece);
+                }
+                else
+                {
+                    playerB.promotePiece(promotedPiece, selectedPiece);
+                }
+
+                chessTable.values[promotedPiece.Row, promotedPiece.Column] = promotedPiece.Value;
+                chessTable.images[promotedPiece.Row, promotedPiece.Column].Image = promotedPiece.Image;
+            }
         }
 
         public void ClickOnTableLayoutPanel(object sender, MouseEventArgs e)
@@ -144,20 +157,6 @@ namespace IAChess
             }
             else
             {
-                ChessPiece promotedPiece = selectedPiece.Promote(selectedPiece.IsWhite, selectedPiece.Row, selectedPiece.Column);
-                if (promotedPiece != null)
-                {
-                    if (selectedPiece.IsWhite)
-                    {
-                        playerW.promotePiece(promotedPiece, selectedPiece);
-                    }
-                    else
-                    {
-                        playerB.promotePiece(promotedPiece, selectedPiece);
-                    }
-
-                    selectedPiece = promotedPiece;
-                }
                 if (tlpChessboard.GetControlFromPosition(cellColumn, cellRow).BackColor == Color.FromArgb(244, 184, 96) && chessTable.values[cellRow, cellColumn] == 0)
                 {
                     SaveNewPosition(cellRow, cellColumn);
@@ -176,7 +175,7 @@ namespace IAChess
                         playerB.Pieces.Remove(redPiece);
                     }
                 }
-                RemoveLastPosition();
+                PromotePiece();               
                 ClearTable(tlpChessboard);
             }
 
