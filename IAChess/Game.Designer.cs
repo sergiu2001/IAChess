@@ -1,6 +1,6 @@
 ﻿namespace IAChess
 {
-    partial class Form1
+    partial class Game
     {
         /// <summary>
         /// Required designer variable.
@@ -61,14 +61,15 @@
             this.tlpChessboard.TabIndex = 0;
             this.tlpChessboard.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.tlpChessboard_CellPaint);
             // 
-            // Form1
+            // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 961);
             this.Controls.Add(this.tlpChessboard);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
+            this.Name = "Game";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Zo Shogi";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);

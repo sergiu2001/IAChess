@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace IAChess
 {
-    public partial class Form1 : Form
+    public partial class Game : Form
     {
         Player playerW = new Player(true);
         Player playerB = new Player(false);
@@ -18,7 +18,7 @@ namespace IAChess
 
         int selectedPieceRow, selectedPieceCol;
         ChessPiece selectedPiece;
-        public Form1()
+        public Game()
         {
             InitializeComponent();
         }
@@ -169,10 +169,22 @@ namespace IAChess
                     if (redPiece.IsWhite)
                     {
                         playerW.Pieces.Remove(redPiece);
+                        if (!playerW.isCheck())
+                        {
+                            MessageBox.Show("Player B won");
+                            this.Close();
+                            Application.Exit();
+                        }
                     }
                     else
                     {
                         playerB.Pieces.Remove(redPiece);
+                        if (!playerB.isCheck())
+                        {
+                            MessageBox.Show("Player W won");
+                            this.Close();
+                            Application.Exit();
+                        }
                     }
                 }
                 PromotePiece();               

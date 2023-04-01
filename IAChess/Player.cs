@@ -73,5 +73,17 @@ namespace IAChess
             Pieces.Insert(index, newPiece);
         }
 
+        public bool isCheck()
+        {
+            foreach (ChessPiece piece in Pieces)
+            {
+                if (piece is King)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
